@@ -1,0 +1,57 @@
+<?php
+
+define('LC_HIGHLIGHT_PERM', 'view highlighted broken links');
+
+/*
+ * Implements hook_permission().
+ */
+function linkchecker_highlight_permission() {
+  $items = array();
+  
+  $items[LC_HIGHLIGHT_PERM] = array(
+    'title' => t('View highlighted broken links'),
+    'description' => t('View links determined to be broken by the Linkchecker module with highlighted backgrounds'),
+  );
+
+  return $items;
+}
+
+/*
+ * Implements hook_preprocess_page().
+ *
+ * This function highlights broken links on the page according to their response code.
+ */
+function linkchecker_highlight_preprocess_page() {
+  if (user_access(LC_HIGHLIGHT_PERM)) {
+    drupal_add_css(drupal_get_path('module', 'linkchecker_highlight') . '/linkchecker_highlight.css', array('type' => 'file'));
+    $ignore_response_codes = preg_split('/(\r\n?|\n)/', variable_get('linkchecker_ignore_response_codes', "200\n206\n302\n304\n401\n403"));
+
+    $query = db_select('linkchecker_node', 'ln');
+    $query->innerJoin('linkchecker_link', 'll', 'll.lid = ln.lid');
+    $query->condition('ll.code', $ignore_response_codes, 'NOT IN');
+    $query->condition('ll.code', -1, '<>');
+    $query->fields('ll', array('url', 'error', 'code'));
+    $query->distinct();
+
+    $result = $query->execute();
+
+    //Use jQuery to add CSS classes defined in linkchecker_highlight.css
+    $js = array();
+    foreach ($result as $data)
+    {
+      $title = (!empty($data->error)) ? 'broken link (' . $data->code . '): ' . $data->error : 'broken link (' . $data->code . ')';
+      $js_add_classes[] = <<<END
+        jQuery('a[href^="{$data->url}"]').addClass("broken-link-{$data->code}");
+END;
+    }
+
+    $js = "jQuery(document).ready(function() {";
+    foreach($js_add_classes as $js_add_class) {
+      $js .= "\n" . $js_add_class;
+    }
+    $js .= "\n});";
+
+    drupal_add_js($js, 'inline');
+  }
+}
+
