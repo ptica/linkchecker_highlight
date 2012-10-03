@@ -1,9 +1,14 @@
 <?php
 
+/**
+ * @file
+ * Highlights broken links.
+ */
+
 define('LC_HIGHLIGHT_PERM', 'view highlighted broken links');
 define('LC_HIGHLIGHT_OWN_PERM', 'view own highlighted broken links');
 
-/*
+/**
  * Implements hook_help().
  */
 function linkchecker_highlight_help($path, $arg) {
@@ -22,7 +27,7 @@ function linkchecker_highlight_help($path, $arg) {
   }
 }
 
-/*
+/**
  * Implements hook_permission().
  */
 function linkchecker_highlight_permission() {
@@ -40,10 +45,11 @@ function linkchecker_highlight_permission() {
   return $items;
 }
 
-/*
+/**
  * Implements hook_preprocess_page().
  *
- * This function highlights broken links on the page according to their response code.
+ * This function highlights broken links on the page according to their response
+ * code.
  */
 function linkchecker_highlight_preprocess_page() {
   if (user_access(LC_HIGHLIGHT_OWN_PERM) || user_access(LC_HIGHLIGHT_PERM)) {
@@ -68,9 +74,7 @@ function linkchecker_highlight_preprocess_page() {
     $js_add_classes = array();
     foreach ($result as $data) {
       $title = (!empty($data->error)) ? 'broken link (' . $data->code . '): ' . $data->error : 'broken link (' . $data->code . ')';
-      $js_add_classes[] = <<<END
-        jQuery('a[href^="{$data->url}"]').addClass("broken-link broken-link-{$data->code}");
-END;
+      $js_add_classes[] = "\tjQuery('a[href^=\"{$data->url}\"]').addClass(\"broken-link broken-link-{$data->code}\")";
     }
 
     $js = "jQuery(document).ready(function() {";
