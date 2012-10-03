@@ -72,13 +72,13 @@ function linkchecker_highlight_preprocess_page() {
     //Use jQuery to add CSS classes defined in linkchecker_highlight.css
     $js_add_classes = array();
     foreach ($result as $data) {
-      $title = (!empty($data->error)) ? 'broken link (' . $data->code . '): ' . $data->error : 'broken link (' . $data->code . ')';
-      $js_add_classes[] = "\tjQuery('a[href^=\"{$data->url}\"]').addClass(\"broken-link broken-link-{$data->code}\")";
+      $title = (!empty($data->error)) ? t('Broken Link') . " ($data->code): $data->error" : t('Broken Link') . " ($data->code)";
+      $js_add_classes[] = "jQuery('a[href^=\"{$data->url}\"]').addClass(\"broken-link broken-link-{$data->code}\")";
     }
 
     $js = "jQuery(document).ready(function() {";
     foreach ($js_add_classes as $js_add_class) {
-      $js .= "\n" . $js_add_class;
+      $js .= "\n\t" . $js_add_class;
     }
     $js .= "\n});";
 
