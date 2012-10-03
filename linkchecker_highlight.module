@@ -15,13 +15,12 @@ function linkchecker_highlight_help($path, $arg) {
   switch ($path) {
     case 'admin/help#linkchecker_highlight':
       $output = '';
-      $output .= '<p>Demonstration of highlighting for broken links:</p>';
-      $output .= '<a href="#" class="broken-link broken-link--110">Broken Link -110</a><br />';
-      $output .= '<a href="#" class="broken-link broken-link-0">Broken Link 0</a><br />';
-      $output .= '<a href="#" class="broken-link broken-link-301">Broken Link 301</a><br />';
-      $output .= '<a href="#" class="broken-link broken-link-403">Broken Link 403</a><br />';
-      $output .= '<a href="#" class="broken-link broken-link-404">Broken Link 404</a><br />';
-      $output = t($output);
+      $output .= '<p>' . t('Demonstration of highlighting for broken links:') . '</p>';
+      $output .= '<a href="#" class="broken-link broken-link--110">' . t('Broken Link') . ' -110</a><br />';
+      $output .= '<a href="#" class="broken-link broken-link-0">' . t('Broken Link') . ' 0</a><br />';
+      $output .= '<a href="#" class="broken-link broken-link-301">' . t('Broken Link') . ' 301</a><br />';
+      $output .= '<a href="#" class="broken-link broken-link-403">' . t('Broken Link') . ' 403</a><br />';
+      $output .= '<a href="#" class="broken-link broken-link-404">' . t('Broken Link') . ' 404</a><br />';
       return $output;
       break;
   }
@@ -34,12 +33,12 @@ function linkchecker_highlight_permission() {
   $items = array();
   
   $items[LC_HIGHLIGHT_PERM] = array(
-    'title' => t('View highlighted broken links'),
-    'description' => t('View links determined to be broken by the Linkchecker module with highlighted backgrounds'),
+    'title' => t("View highlighted broken links"),
+    'description' => t("View links determined to be broken by the Linkchecker module with highlighted backgrounds"),
   );
   $items[LC_HIGHLIGHT_OWN_PERM] = array(
-    'title' => t('View own highlighted broken links'),
-    'description' => t('View links determined to be broken by the Linkchecker module with highlighted backgrounds in user\'s own nodes'),
+    'title' => t("View own highlighted broken links"),
+    'description' => t("View links determined to be broken by the Linkchecker module with highlighted backgrounds in user's own nodes"),
   );
 
   return $items;
