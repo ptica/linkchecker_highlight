@@ -1,7 +1,8 @@
-Highlight links determined to be broken by the Linkchecker module. A user must
-have the "View highlighted broken links" permission to see highlighted broken
-links. Obviously, it is recommended that only users who have access to the
-broken links report be granted this permission.
+The Linkchecker Highlight module will highlight links determined to be broken
+by the Linkchecker module so that broken links can be easily found in large
+blocks of text. A user must have the "View highlighted broken links" permission
+to see highlighted broken links. Obviously, it is recommended that only users
+who have access to the broken links report be granted this permission.
 
 Color codes:
 
@@ -19,3 +20,6 @@ CSS files, like so:
   color: black;
   background: orange;
 }
+
+You can see how highlighted links will look by going to
+admin/help/linkchecker_highlight

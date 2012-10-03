@@ -4,6 +4,25 @@ define('LC_HIGHLIGHT_PERM', 'view highlighted broken links');
 define('LC_HIGHLIGHT_OWN_PERM', 'view own highlighted broken links');
 
 /*
+ * Implements hook_help().
+ */
+function linkchecker_highlight_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#linkchecker_highlight':
+      $output = '';
+      $output .= '<p>Demonstration of highlighting for broken links:</p>';
+      $output .= '<a href="#" class="broken-link broken-link--110">Broken Link -110</a><br />';
+      $output .= '<a href="#" class="broken-link broken-link-0">Broken Link 0</a><br />';
+      $output .= '<a href="#" class="broken-link broken-link-301">Broken Link 301</a><br />';
+      $output .= '<a href="#" class="broken-link broken-link-403">Broken Link 403</a><br />';
+      $output .= '<a href="#" class="broken-link broken-link-404">Broken Link 404</a><br />';
+      $output = t($output);
+      return $output;
+      break;
+  }
+}
+
+/*
  * Implements hook_permission().
  */
 function linkchecker_highlight_permission() {
