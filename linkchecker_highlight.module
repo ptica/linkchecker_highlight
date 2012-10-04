@@ -31,7 +31,7 @@ function linkchecker_highlight_help($path, $arg) {
  */
 function linkchecker_highlight_permission() {
   $items = array();
-  
+
   $items[LC_HIGHLIGHT_PERM] = array(
     'title' => t("View highlighted broken links"),
     'description' => t("View links determined to be broken by the Linkchecker module with highlighted backgrounds"),
@@ -69,7 +69,7 @@ function linkchecker_highlight_preprocess_page() {
 
     $result = $query->execute();
 
-    //Use jQuery to add CSS classes defined in linkchecker_highlight.css
+    // Use jQuery to add CSS classes defined in linkchecker_highlight.css
     $js_add_classes = array();
     foreach ($result as $data) {
       $title = (!empty($data->error)) ? t('Broken Link') . " ($data->code): $data->error" : t('Broken Link') . " ($data->code)";
@@ -85,4 +85,3 @@ function linkchecker_highlight_preprocess_page() {
     drupal_add_js($js, 'inline');
   }
 }
-
