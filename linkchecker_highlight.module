@@ -73,7 +73,11 @@ function linkchecker_highlight_preprocess_page() {
     $js_add_classes = array();
     foreach ($result as $data) {
       $title = (!empty($data->error)) ? t('Broken Link') . " ($data->code): $data->error" : t('Broken Link') . " ($data->code)";
-      $js_add_classes[] = "jQuery('a[href^=\"{$data->url}\"]').addClass(\"broken-link broken-link-{$data->code}\")";
+      $js_add_classes[] = <<<END
+var selector = "a[href^=\"{$data->url}\"]";
+jQuery(selector).addClass("broken-link broken-link-{$data->code}");
+jQuery(selector).attr("title", "$title");
+END;
     }
 
     $js = "jQuery(document).ready(function() {";
