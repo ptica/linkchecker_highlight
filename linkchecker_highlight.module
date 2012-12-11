@@ -50,7 +50,7 @@ function linkchecker_highlight_permission() {
  * This function highlights broken links on the page according to their response
  * code.
  */
-function linkchecker_highlight_preprocess_page() {
+function linkchecker_highlight_preprocess_page(&$vars) {
   if (user_access(LC_HIGHLIGHT_OWN_PERM) || user_access(LC_HIGHLIGHT_PERM)) {
     drupal_add_css(drupal_get_path('module', 'linkchecker_highlight') . '/linkchecker_highlight.css', array('type' => 'file'));
     $ignore_response_codes = preg_split('/(\r\n?|\n)/', variable_get('linkchecker_ignore_response_codes', "200\n206\n302\n304\n401\n403"));
