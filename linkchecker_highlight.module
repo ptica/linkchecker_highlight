@@ -84,7 +84,7 @@ function linkchecker_highlight_preprocess_page(&$vars) {
     // Use jQuery to add CSS classes defined in linkchecker_highlight.css
     $js_add_classes = array();
     foreach ($result as $data) {
-      if(isset($data->nid) && !node_access(node_load('update', $data->nid)) {
+      if(isset($data->nid) && !node_access(node_load('update', $data->nid))) {
         // User does not have permission to see highlighted links in all nodes
         // and does not have permission to update the node
         continue;
