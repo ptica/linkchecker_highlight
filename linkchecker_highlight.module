@@ -68,7 +68,7 @@ function linkchecker_highlight_preprocess_page(&$vars) {
       $query->innerJoin('node', 'n', 'ln.nid = n.nid');
       $query->condition('n.uid', $user->uid);
     }
-    else if(user_access(LC_HIGHLIGHT_NODE_ACCESS_PERM)) {
+    else if(user_access(LC_HIGHLIGHT_NODE_ACCESS_PERM) && !user_access(LC_HIGHLIGHT_PERM)) {
       // User has permission to see highlighted links in updateable nodes but
       // not all nodes
       $query->innerJoin('node', 'n', 'ln.nid = n.nid');
