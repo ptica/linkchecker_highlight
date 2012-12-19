@@ -92,10 +92,30 @@ function linkchecker_highlight_preprocess_page(&$vars) {
       }
       $title = (!empty($data->error)) ? t('Broken Link') . " ($data->code): $data->error" : t('Broken Link') . " ($data->code)";
       $js_add_classes[] = <<<END
-var selector = "a[href^=\"{$data->url}\"]";
+var selector = "a[href=\"{$data->url}\"]";
 jQuery(selector).addClass("broken-link broken-link-{$data->code}");
 jQuery(selector).attr("title", "$title");
 END;
+
+      $docroot = "http://{$_SERVER['HTTP_HOST']}";
+      if(strpos($data->url, $docroot) === 0) {
+        $local_url = substr($data->url, strlen($docroot));
+        $js_add_classes[] = <<<END
+var selector = "a[href=\"{$local_url}\"]";
+jQuery(selector).addClass("broken-link broken-link-{$data->code}");
+jQuery(selector).attr("title", "$title");
+END;
+      }
+
+      $cdir = $docroot . $_SERVER['REQUEST_URI'];
+      if(strpos($data->url, $cdir) === 0) {
+        $cdir_url = substr($data->url, strlen($cdir));
+        $js_add_classes[] = <<<END
+var selector = "a[href=\"{$cdir_url}\"]";
+jQuery(selector).addClass("broken-link broken-link-{$data->code}");
+jQuery(selector).attr("title", "$title");
+END;
+      }
     }
 
     $js = "jQuery(document).ready(function() {";
