@@ -84,24 +84,33 @@ function linkchecker_highlight_preprocess_page(&$vars) {
 
     // Use jQuery to add CSS classes defined in linkchecker_highlight.css
     $js_add_classes = array();
+    $js_data = array();
     foreach ($result as $data) {
+      // tilda replace
+      $data->url = str_replace('%7E', '~', $data->url);
+      // trailing slash replace
+      $data->url = rtrim($data->url, '/');
+
       if(isset($data->nid) && !node_access('update', node_load($data->nid))) {
         // User does not have permission to see highlighted links in all nodes
         // and does not have permission to update the node
         continue;
       }
       $title = (!empty($data->error)) ? t('Broken Link') . " ($data->code): $data->error" : t('Broken Link') . " ($data->code)";
+
+      $js_data[$data->url] = 1;
       $js_add_classes[] = <<<END
-var selector = "a[href=\"{$data->url}\"]";
+var selector = "a[data-href=\"{$data->url}\"]";
 jQuery(selector).addClass("broken-link broken-link-{$data->code}");
 jQuery(selector).attr("title", "$title");
 END;
 
-      $docroot = "http://{$_SERVER['HTTP_HOST']}";
+      /* do not generate relative links queries
+      $docroot = "https://{$_SERVER['HTTP_HOST']}";
       if(strpos($data->url, $docroot) === 0) {
         $local_url = substr($data->url, strlen($docroot));
         $js_add_classes[] = <<<END
-var selector = "a[href=\"{$local_url}\"]";
+var selector = "a[data-href=\"{$local_url}\"]";
 jQuery(selector).addClass("broken-link broken-link-{$data->code}");
 jQuery(selector).attr("title", "$title");
 END;
@@ -111,19 +120,27 @@ END;
       if(strpos($data->url, $cdir) === 0) {
         $cdir_url = substr($data->url, strlen($cdir));
         $js_add_classes[] = <<<END
-var selector = "a[href=\"{$cdir_url}\"]";
+var selector = "a[data-href=\"{$cdir_url}\"]";
 jQuery(selector).addClass("broken-link broken-link-{$data->code}");
 jQuery(selector).attr("title", "$title");
 END;
-      }
+      } */
     }
 
     $js = "jQuery(document).ready(function() {";
+    $js .= "jQuery('a').each(function(i,e) { var je = jQuery(e); je.attr('data-href', decodeURI(je.prop('href')).replace(/\/$/, ''))});";
     foreach ($js_add_classes as $js_add_class) {
       $js .= "\n\t" . $js_add_class;
     }
     $js .= "\n});";
 
     drupal_add_js($js, 'inline');
+    drupal_add_js(
+	array('linkchecker_highlight_ckeditor' => array(
+	    'links' => $js_data,
+	    'url_alias'=>dirname(drupal_get_path_alias('node/'.@$vars['node']->nid)),
+    	    'url_dirname'=>dirname(current_path()),
+    	)
+    ), 'setting');
   }
 }

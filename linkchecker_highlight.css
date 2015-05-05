@@ -1,5 +1,5 @@
 .broken-link {
-  background: #444;
+  background: #c00;
   color: white;
 }
 
@@ -26,4 +26,9 @@
 .broken-link-404 {
   background: #c00;
   color: white;
+}
+
+a[data-broken-link] {
+	background: #c00;
+	color: white;
 }
