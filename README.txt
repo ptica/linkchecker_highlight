@@ -1,3 +1,9 @@
+this is a clone of https://www.drupal.org/sandbox/caesius/1801408
+with following fixes:
+[x] - tilda causes no problems
+[x] - trailing slashes are normalized
+[x] - operate on data-href attribute where a normalized url is stored by ...
+
 The Linkchecker Highlight module will highlight links determined to be broken
 by the Linkchecker module so that broken links can be easily found in large
 blocks of text. A user must have the "View highlighted broken links" permission
